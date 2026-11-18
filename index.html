@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTC / SOL 行情</title>
+<style>
+  body { font-family: sans-serif; background: #0d1117; color: #e6edf3; text-align: center; padding-top: 15vh; margin: 0; }
+  h1 { font-size: 28px; }
+  .price { font-size: 48px; margin: 20px 0 5px; }
+  .label { color: #8b949e; }
+  .time { color: #8b949e; font-size: 14px; margin-top: 30px; }
+</style>
+</head>
+<body>
+<h1>BTC / SOL</h1>
+<div class="label">Bitcoin</div>
+<div class="price" id="btc">--</div>
+<div class="label">Solana</div>
+<div class="price" id="sol">--</div>
+<div class="time" id="time"></div>
+<script>
+async function load() {
+  try {
+    const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana&vs_currencies=usd');
+    const d = await r.json();
+    document.getElementById('btc').textContent = '$' + d.bitcoin.usd.toLocaleString();
+    document.getElementById('sol').textContent = '$' + d.solana.usd.toLocaleString();
+    document.getElementById('time').textContent = '更新于 ' + new Date().toLocaleString('zh-CN');
+  } catch (e) {
+    document.getElementById('time').textContent = '行情加载失败，稍后再试';
+  }
+}
+load();
+setInterval(load, 60000);
+</script>
+</body>
+</html>
